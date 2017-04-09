@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Huevue</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="default.css" />
+	</head>
+
+	<body>
+		<div id="app" v-cloak>
+			<article>
+				<h1>HueVue<template v-if="connected">: {{config.name}}</template></h1>
+				Bridge: <input :value="bridge" placholder="Bridge IP" v-on:keyup="set('bridge', $event.target.value)">
+				Username: <input :value="user" placeholder="User" v-on:keyup="set('user', $event.target.value)">
+
+				<button v-on:click="refresh" v-if="this.user != ''">Refresh</button>
+				<button v-on:click="register" v-if="this.user == ''">Register</button>
+			</article>
+
+			<article>
+				<h2>Lights</h2>
+				<ul>
+					<hue-light :light="light" :hue-id="lightid" v-for="(light, lightid) in lights" :key="lightid" v-on:call="call"/>
+				</ul>
+			</article>
+
+			<article>
+				<h2>Sensors</h2>
+				<ul>
+					<hue-sensor :sensor="sensor" :hue-id="sensorId" v-for="(sensor, sensorId) in sensors" :key="sensorId" v-on:call="call"/>
+				</ul>
+			</article>
+
+			<article>
+				<h2>Scenes</h2>
+				<ul>
+					<hue-scene :scene="scene" :hue-id="sceneId" v-for="(scene, sceneId) in scenes" :key="sceneId" v-on:call="call"/>
+				</ul>
+			</article>
+
+			<article>
+				<h2>Schedules</h2>
+				<ul>
+					<hue-schedule :schedule="schedule" :hue-id="scheduleId" v-for="(schedule, scheduleId) in schedules" :key="scheduleId" v-on:call="call"/>
+				</ul>
+			</article>
+
+			<article>
+				<h2>Resource links</h2>
+				<ul>
+					<hue-resource-link :link="link" :hue-id="linkId" v-for="(link, linkId) in resourcelinks" :key="linkId" v-on:call="call"/>
+				</ul>
+			</article>
+
+			<article>
+				<h2>Groups</h2>
+				<ul>
+					<hue-group :group="group" :hue-id="groupId" v-for="(group, groupId) in groups" :key="groupId" v-on:call="call"/>
+				</ul>
+			</article>
+		</div>
+
+		<template id="hue-light">
+			<div :class="{'hue-light':true, 'on': light.state.on}">
+				<h3>{{light.name}}</h3>
+				{{Math.round(light.state.bri/255*100)}}%
+				<button v-on:click="toggle(!light.state.on)">Toggle</button>
+			</div>
+		</template>
+
+		<template id="hue-scene">
+			<div :class="{'hue-scene':true}">
+				<h3>{{scene.name}}</h3>
+				<button v-on:click="set">Set</button>
+			</div>
+		</template>
+
+		<template id="hue-schedule">
+			<div :class="{'hue-schedule':true}">
+				<h3>{{schedule.name}}</h3>
+			</div>
+		</template>
+
+		<template id="hue-group">
+			<div :class="{'hue-group':true}">
+				<h3>{{group.name}}</h3>
+			</div>
+		</template>
+
+		<template id="hue-resource-link">
+			<div :class="{'hue-resource-link':true}">
+				<h3>{{link.name}}</h3>
+			</div>
+		</template>
+
+		<template id="hue-sensor">
+			<div :class="{'hue-sensor':true}">
+				<h3>{{sensor.name}}</h3> 
+				<hue-battery v-if="sensor.config.battery" :charge="sensor.config.battery"></hue-battery>
+
+				<template v-if="sensor.type == 'ZLLTemperature' ">
+					 Temperature: {{Math.round(sensor.state.temperature/100)}}˚
+				</template>
+
+				<template v-if="sensor.type == 'ZLLLightLevel' ">
+					 Light level: {{Math.round(sensor.state.lightlevel/100)}} Lux
+				</template>
+			</div>
+		</template>
+
+		<template id="hue-battery">
+			<div class="hue-battery">
+				<div :style="{'width': charge+'%'}"></div>
+			</div>
+		</template>
+
+		<script type="text/javascript" src="lib/vue.js"></script>
+		<script type="text/javascript" src="lib/vue-resource.js"></script>
+		<script type="text/javascript" src="huevue.js"></script>
+	</body>
+</html>

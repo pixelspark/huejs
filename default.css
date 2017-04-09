@@ -1,0 +1,80 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+	font-family: verdana, arial, sans-serif;
+	font-size: 9pt;
+	color: rgb(77,77,77);
+	line-height: 1.2em;
+}
+
+button {
+	padding: 3px;
+}
+
+[v-cloak] {
+	display: none;
+}
+
+li {
+	list-style-type: circle;
+	margin-left: 20px;
+}
+
+article {
+	padding: 5px;
+	padding-left: 15px;
+}
+
+article:nth-child(2n+1) {
+	background-color: #EFEFEF;
+}
+
+h1 {
+	font-size: 13pt;
+	padding: 10px;
+	padding-left: 0px;
+}
+
+h2 {
+	font-size: 11pt;
+}
+
+h3 {
+	font-size: 9pt;
+}
+
+.hue-light, .hue-sensor, .hue-scene, .hue-group, .hue-resource-link, .hue-schedule {
+	display: inline-block;
+	padding: 10px;
+	margin: 5px;
+	border-radius: 10px;
+	width: 150px;
+	height: 75px;
+	background-color: rgba(0,0,0,0.1);
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.hue-light.on {
+	background-color: rgba(0,155,0,0.3);
+}
+
+.hue-battery {
+	display: inline-block;
+	height: 10px;
+	width: 30px;
+	border: solid 1px #A0A0A0;
+	padding: 1px;
+	position: relative;
+	overflow: hidden;
+	border-radius: 2px;
+}
+
+.hue-battery > div {
+	background-color: green;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	height: 100%;
+}
