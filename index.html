@@ -95,16 +95,31 @@
 		</template>
 
 		<template id="hue-sensor">
-			<div :class="{'hue-sensor':true}">
+			<div 
+				:class="{'hue-sensor':true, 'on': (sensor.state.presence || sensor.state.daylight || sensor.state.dark)}" 
+				style="position: relative;"
+				v-if="['ZLLSwitch','ZLLTemperature','ZLLLightLevel', 'ZLLPresence'].indexOf(sensor.type) >= 0"
+			>
+				<hue-battery v-if="sensor.config.battery" :charge="sensor.config.battery" style="position: absolute; bottom: 7px; right: 7px;"></hue-battery>
 				<h3>{{sensor.name}}</h3> 
-				<hue-battery v-if="sensor.config.battery" :charge="sensor.config.battery"></hue-battery>
 
 				<template v-if="sensor.type == 'ZLLTemperature' ">
 					 Temperature: {{Math.round(sensor.state.temperature/100)}}˚
 				</template>
 
+				<template v-if="sensor.type == 'ZLLSwitch' ">
+					 Last event: {{sensor.state.buttonevent}}
+				</template>
+
 				<template v-if="sensor.type == 'ZLLLightLevel' ">
-					 Light level: {{Math.round(sensor.state.lightlevel/100)}} Lux
+					 Light level: {{Math.round(sensor.state.lightlevel/100)}} Lux 
+					 <template v-if="sensor.state.daylight">(daylight)</template>
+					 <template v-if="sensor.state.dark">(dark)</template>
+				</template>
+
+				<template v-if="sensor.type == 'ZLLPresence'">
+					<template v-if="sensor.state.presence">Presence detected</template>
+					<template v-else>Nothing detected</template>
 				</template>
 			</div>
 		</template>

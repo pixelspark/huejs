@@ -42,6 +42,10 @@ h2 {
 
 h3 {
 	font-size: 9pt;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width: 100%;
+	overflow: hidden;
 }
 
 .hue-light, .hue-sensor, .hue-scene, .hue-group, .hue-resource-link, .hue-schedule {
@@ -54,9 +58,10 @@ h3 {
 	background-color: rgba(0,0,0,0.1);
 	overflow: hidden;
 	text-overflow: ellipsis;
+	vertical-align: top;
 }
 
-.hue-light.on {
+.hue-light.on, .hue-sensor.on {
 	background-color: rgba(0,155,0,0.3);
 }
 
@@ -72,8 +77,9 @@ h3 {
 }
 
 .hue-battery > div {
-	background-color: green;
+	background-color: rgba(0,55,0,0.5);
 	position: absolute;
+	border: solid 1px white;
 	left: 0px;
 	top: 0px;
 	height: 100%;
