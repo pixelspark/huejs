@@ -40,26 +40,74 @@
 			</article>
 
 			<article>
-				<h2>Schedules</h2>
-				<ul>
-					<hue-schedule :schedule="schedule" :hue-id="scheduleId" v-for="(schedule, scheduleId) in schedules" :key="scheduleId" v-on:call="call"/>
-				</ul>
-			</article>
+				<details>
+					<summary><h2>Schedules</h2></summary>
+					<ul>
+						<hue-schedule :schedule="schedule" :hue-id="scheduleId" v-for="(schedule, scheduleId) in schedules" :key="scheduleId" v-on:call="call"/>
+					</ul>
+				</details>
 
-			<article>
-				<h2>Resource links</h2>
-				<ul>
-					<hue-resource-link :link="link" :hue-id="linkId" v-for="(link, linkId) in resourcelinks" :key="linkId" v-on:call="call"/>
-				</ul>
-			</article>
+				<details>
+					<summary><h2>Resource links</h2></summary>
+					<ul>
+						<hue-resource-link :link="link" :hue-id="linkId" v-for="(link, linkId) in resourcelinks" :key="linkId" v-on:call="call"/>
+					</ul>
+				</details>
 
-			<article>
-				<h2>Groups</h2>
-				<ul>
-					<hue-group :group="group" :hue-id="groupId" v-for="(group, groupId) in groups" :key="groupId" v-on:call="call"/>
-				</ul>
+				<details>
+					<summary><h2>Groups</h2></summary>
+					<ul>
+						<hue-group :group="group" :hue-id="groupId" v-for="(group, groupId) in groups" :key="groupId" v-on:call="call"/>
+					</ul>
+				</details>
+
+				<details>
+					<summary><h2>Rules</h2></summary>
+					<table>
+						<thead>
+							<tr>
+								<th>Rule name</th>
+								<th>Last triggered</th>
+								<th>Conditions</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr is="hue-rule-tr" :rule="rule" :hue-id="ruleId" v-for="(rule, ruleId) in rules" :key="ruleId" v-on:call="call"></tr>
+						</tbody>
+					</table>
+				</details>
 			</article>
 		</div>
+
+		<template id="hue-time">
+			<span>
+				{{time.toLocaleString()}}
+			</span>
+		</template>
+
+		<template id="hue-rule-tr">
+			<tr>			
+				<td>{{rule.name}}</td>
+				<td><hue-time :time="new Date(rule.lasttriggered)"/></td>
+				<td>
+					<ul>
+						<li v-for="cond in rule.conditions">
+							{{cond.address}} {{cond.operator}} {{cond.value}}
+						</li>
+					</ul>
+				</td>
+
+				<td>
+					<ul>
+						<li v-for="action in rule.actions">
+							{{action.address}} =&gt; {{action.body}}
+						</li>
+					</ul>
+				</td>
+			</tr>
+		</template>
 
 		<template id="hue-light">
 			<div :class="{'hue-light':true, 'on': light.state.on}">
@@ -104,15 +152,15 @@
 				<h3>{{sensor.name}}</h3> 
 
 				<template v-if="sensor.type == 'ZLLTemperature' ">
-					 Temperature: {{Math.round(sensor.state.temperature/100)}}˚
+					 Temperature: {{Math.round(sensor.state.temperature/10)/10}}˚
 				</template>
 
 				<template v-if="sensor.type == 'ZLLSwitch' ">
-					 Last event: {{sensor.state.buttonevent}}
+					 Last event: {{button}} {{buttonPressType}}
 				</template>
 
 				<template v-if="sensor.type == 'ZLLLightLevel' ">
-					 Light level: {{Math.round(sensor.state.lightlevel/100)}} Lux 
+					 <abbr :title="this.lux + ' lux' ">{{luxExplanation}}</abbr>
 					 <template v-if="sensor.state.daylight">(daylight)</template>
 					 <template v-if="sensor.state.dark">(dark)</template>
 				</template>

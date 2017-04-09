@@ -17,12 +17,12 @@ button {
 }
 
 li {
-	list-style-type: circle;
+	list-style-type: disc;
 	margin-left: 20px;
 }
 
 article {
-	padding: 5px;
+	padding: 10px;
 	padding-left: 15px;
 }
 
@@ -38,6 +38,9 @@ h1 {
 
 h2 {
 	font-size: 11pt;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	display: inline-block;
 }
 
 h3 {
@@ -83,4 +86,45 @@ h3 {
 	left: 0px;
 	top: 0px;
 	height: 100%;
+}
+
+table {
+	border-collapse: collapse;
+	border: none;
+}
+
+table th {
+	font-weight: bold;
+	background-color: rgba(0,55,100,1.0);
+	color: white;
+}
+
+table tr td, table tr th {
+	padding: 5px;
+	vertical-align: top;
+	text-align: left;
+}
+
+table tr {
+	padding: 5px;
+	border: none;
+	border-collapse: collapse;
+}
+
+table tr:nth-child(2n+1) {
+	background-color: #EFEFEF;
+}
+
+abbr {
+	border-bottom: dotted 1px #A0A0A0;
+}
+
+details summary {
+	outline: none;
+	cursor: pointer;
+}
+
+details {
+	margin-top: 5px;
+	margin-bottom: 5px;
 }

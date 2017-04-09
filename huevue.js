@@ -8,6 +8,21 @@ Vue.component('hue-battery', {
 	}
 });
 
+Vue.component('hue-time', {
+	template: '#hue-time',
+	props: {
+		time: {type: Date}
+	}
+});
+
+Vue.component('hue-rule-tr', {
+	template: '#hue-rule-tr',
+	props: {
+		rule: {type: Object},
+		hueId: {type: String}
+	}
+});
+
 Vue.component('hue-group', {
 	template: '#hue-group',
 	props: {
@@ -68,13 +83,69 @@ Vue.component('hue-sensor', {
 	},
 
 	methods: {
+	},
+
+	computed: {
+		button: function() {
+			let btnId = Math.floor(this.sensor.state.buttonevent / 1000);
+			switch(btnId) {
+				case 1: return "on button";
+				case 2: return "up button";
+				case 3: return "down button";
+				case 4: return "off button";
+				default: return "unknown button";
+			}
+		},
+
+		buttonPressType: function() {
+			let type = this.sensor.state.buttonevent % 1000;
+			switch(type) {
+				case 0: return "pressed";
+				case 1: return "hold";
+				case 2: return "released (short)";
+				case 3: return "released (long)";
+				default: return "unknown " + type;
+			}
+		},
+
+		lux: function() {
+			return Math.round(Math.pow(10, (this.sensor.state.lightlevel-1)/10000));
+		},
+
+		luxExplanation: function() {
+			var lux = this.lux;
+
+			if(lux <= 1) { return "bright moonlight"; }
+			if(lux <= 2) { return "nightlight"; }
+			if(lux <= 10) { return "dimmed light"; }
+			if(lux <= 50) { return "cosy living room"; }
+			if(lux <= 150) { return "normal"; }
+			if(lux <= 350) { return "working/reading light"; }
+			if(lux <= 700) { return "inside daylight"; }
+			if(lux <= 2000) { return "very bright"; }
+			else { return "outside light / direct sunlight"; }
+		}
 	}
 });
 
 var app = new Vue({
 	el: '#app',
 	data: function() {
-		var initial = {bridge: '', user: '', lights: {},  sensors: {}, schedules: {}, resourcelinks: {}, scenes: {}, groups: {}, config: {}, connected: false};
+		var initial = {
+			bridge: '', 
+			user: '', 
+			connected: false,
+
+			// Hue state data
+			lights: {},  
+			sensors: {}, 
+			schedules: {}, 
+			resourcelinks: {}, 
+			scenes: {}, 
+			groups: {}, 
+			config: {},
+			rules: {},
+		};
 
 		try {
 			if("hue" in window.localStorage) {
@@ -125,6 +196,7 @@ var app = new Vue({
 				self.groups = msg.groups;
 				self.scenes = msg.scenes;
 				self.config = msg.config;
+				self.rules = msg.rules;
 			});
 		},
 
