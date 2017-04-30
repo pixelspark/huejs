@@ -1,6 +1,6 @@
-# HueVue: a Vue-based client for Philips Hue
+# HueJS: a Vue-based client for Philips Hue
 
-HueVue is a simple web client for Philips Hue systems built with Vue. It connects directly to the Hue hub (so you need to be in the same network).
+HueJS is a simple web client for Philips Hue systems built with Vue. It connects directly to the Hue hub (so you need to be in the same network).
 
 ## Installation
 
@@ -8,4 +8,4 @@ Simply clone this repository and point your browser to index.html. Insert the IP
 
 ## License
 
-HueVue is licensed under the MIT license (see the LICENSE file)
+HueJS is licensed under the MIT license (see the LICENSE file)
