@@ -59,6 +59,8 @@ Vue.component('hue-light', {
 			this.$emit('call', "/lights/" + this.hueId + "/state", {on: on});
 		},
 		colour: function(e) {
+			
+			// See https://developers.meethue.com/documentation/color-conversions-rgb-xy
 
 			const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(e.target.value);
 
@@ -80,7 +82,42 @@ Vue.component('hue-light', {
 			const colour = [x, y]
 
 			console.log("Set colour", colour)
-			this.$emit('call', "/lights/" + this.hueId + "/state", {on: true, xy: colour});
+			this.$emit('call', "/lights/" + this.hueId + "/state", {on: true, xy: colour, bri: 254});
+		},
+		toHex: function(state) {
+
+			const x = state.xy[0]; // the given x value
+			const y = state.xy[1]; // the given y value
+			const z = 1.0 - x - y;
+			const Y = state.bri; // The given brightness value
+			const X = (Y / y) * x;
+			const Z = (Y / y) * z;
+
+			const red1 =  X * 1.656492 - Y * 0.354851 - Z * 0.255038;
+			const green1 = -X * 0.707196 + Y * 1.655397 + Z * 0.036152;
+			const blue1 =  X * 0.051713 - Y * 0.121364 + Z * 1.011530;
+
+			const red2 = (red1 <= 0.0031308 ? 12.92 * red1 : (1.0 + 0.055) * Math.pow(red1, (1.0 / 2.4)) - 0.055);
+			const green2 = (green1 <= 0.0031308 ? 12.92 * green1 : (1.0 + 0.055) * Math.pow(green1, (1.0 / 2.4)) - 0.055);
+			const blue2 = (blue1 <= 0.0031308 ? 12.92 * blue1 : (1.0 + 0.055) * Math.pow(blue1, (1.0 / 2.4)) - 0.055);
+
+			const correction = Math.max(red2, green2, blue2)
+
+			const red = Math.floor(Math.max(red2 / correction, 0) * 255)
+			const green = Math.floor(Math.max(green2 / correction, 0) * 255)
+			const blue = Math.floor(Math.max(blue2 / correction, 0) * 255)
+
+
+
+			const colourHex = "#" +
+					red.toString(16).padStart(2, "0") +
+					green.toString(16).padStart(2, "0") +
+					blue.toString(16).padStart(2, "0");
+
+			console.log("Current colour is", {r: red, g: green, b: blue})
+			console.log("Current colour is", colourHex)
+
+			return colourHex
 		}
 	}
 });

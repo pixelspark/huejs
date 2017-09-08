@@ -114,7 +114,7 @@
 				<h3>{{light.name}}</h3>
 				{{Math.round(light.state.bri/255*100)}}%
 				<button v-on:click="toggle(!light.state.on)">Toggle</button>
-				<input type="color" v-on:change="colour">
+				<input type="color" v-on:change="colour" :value="toHex(light.state)">
 			</div>
 		</template>
 
