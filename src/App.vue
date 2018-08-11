@@ -2,8 +2,8 @@
 	<div id="app" v-cloak>
 			<article>
 				<h1>HueJS <template v-if="connected">: {{config.name}}</template></h1>
-				Bridge: <input :value="bridge" placholder="Bridge IP" v-on:keyup="set('bridge', $event.target.value)">
-				Username: <input :value="user" placeholder="User" v-on:keyup="set('user', $event.target.value)">
+				Bridge: <input :value="bridge" placholder="Bridge IP" type="text" v-on:keyup="set('bridge', $event.target.value)">
+				Username: <input :value="user" placeholder="User" type="text" v-on:keyup="set('user', $event.target.value)">
 
 				<button v-on:click="refresh" v-if="this.user != ''">Refresh</button>
 				<button v-on:click="register" v-if="this.user == ''">Register</button>
@@ -290,7 +290,7 @@ h3 {
 	overflow: hidden;
 }
 
-.hue-light, .hue-sensor, .hue-scene, .hue-group, .hue-resource-link, .hue-schedule {
+.hue-sensor, .hue-group, .hue-resource-link, .hue-schedule {
 	display: inline-block;
 	padding: 10px;
 	margin: 5px;
@@ -303,7 +303,7 @@ h3 {
 	vertical-align: top;
 }
 
-.hue-light.on, .hue-sensor.on {
+.hue-sensor.on {
 	background-color: rgba(0,155,0,0.3);
 }
 
@@ -346,5 +346,9 @@ details summary {
 details {
 	margin-top: 5px;
 	margin-bottom: 5px;
+}
+
+input[type='text'] {
+	width: 250px;
 }
 </style>

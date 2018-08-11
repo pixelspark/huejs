@@ -1,6 +1,7 @@
 <template>
 	<div :class="{'hue-schedule':true}">
 		<h3>{{schedule.name}}</h3>
+		{{schedule.localtime}}
 	</div>
 </template>
 

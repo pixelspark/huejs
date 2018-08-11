@@ -1,10 +1,9 @@
 <template>
-	<div :class="{'hue-light':true, 'on': light.state.on}">
+	<div :class="{'hue-light':true, 'on': light.state.on}" :style="{'background-color': (light.state.on && light.state.hue ? hexColor : '')}" @click="toggle(!light.state.on)">
 		<h3>{{light.name}}</h3>
 		<template v-if="!isNaN(light.state.bri)">
 			{{Math.round(light.state.bri/255*100)}} % <br/>
 		</template>
-		<button v-on:click="toggle(!light.state.on)">Toggle</button>
 		<input type="color" v-on:change="colour" v-if="light.state.hue" :value="hexColor">
 	</div>
 </template>
@@ -81,4 +80,25 @@ export default {
 </script>
 
 <style>
+.hue-light {
+	display: inline-block;
+	padding: 10px;
+	margin: 5px;
+	border-radius: 10px;
+	width: 150px;
+	height: 75px;
+	background-color: rgba(0,0,0,0.1);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: top;
+	cursor: pointer;
+}
+
+.hue-light:hover {
+	background-color: rgba(0,0,0,0.2);
+}
+
+.hue-light.on {
+	background-color: rgba(0,155,0,0.3);
+}
 </style>
